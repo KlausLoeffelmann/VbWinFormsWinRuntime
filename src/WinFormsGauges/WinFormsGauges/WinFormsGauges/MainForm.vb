@@ -3,6 +3,9 @@ Imports Windows.Devices.Sensors
 
 Public Class MainForm
 
+    Private _browserInitializationAwaiter As TaskCompletionSource = New TaskCompletionSource()
+    Private _browserNavigationCompletedAwaiter As TaskCompletionSource(Of Uri)
+
     Private WithEvents _geoLocator As Geolocator
     Private WithEvents _accelerometer As Accelerometer
     Private _speedUnit As SpeedUnit
@@ -28,15 +31,23 @@ Public Class MainForm
                 })
         Next
 
+        'Call back, when the WebView Control is ready.
+        AddHandler _webView.CoreWebView2Ready, AddressOf WebView_CoreWebViewReady
+
         SpeedUnit = SpeedUnit.MilesPerHours
         UpdateGaugeScale()
     End Sub
 
-    Private Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+    Private Async Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
+        _gpsStatusLabel.Text = "Initializing WebBrowser..."
         _geoLocator = New Geolocator() With
         {
             .ReportInterval = 100
         }
+
+        Await WaitForWebViewInitializedAsync()
+        Await NavigateAsync(New Uri("https://bing.com/maps/default.aspx?cp=43.901683~-69.522416&lvl=12&style=r"))
     End Sub
 
     Private Sub _geoLocator_PositionChanged(sender As Geolocator, args As PositionChangedEventArgs) Handles _geoLocator.PositionChanged
@@ -90,6 +101,43 @@ Public Class MainForm
         End With
     End Sub
 
+    Private Sub WebView_CoreWebViewReady(sender As Object, e As EventArgs)
+        _browserInitializationAwaiter.TrySetResult()
+        AddHandler _webView.CoreWebView2.NavigationCompleted, AddressOf WebView_NavigationCompleted
+    End Sub
+
+    Private Sub WebView_NavigationCompleted(sender As Object, e As Microsoft.Web.WebView2.Core.CoreWebView2NavigationCompletedEventArgs)
+        Debug.WriteLine($"NavigationCompleted-Success: {e.IsSuccess}")
+        Debug.WriteLine($"NavigationCompleted-Navigation ID: {e.NavigationId}")
+
+        _browserNavigationCompletedAwaiter.TrySetResult(New Uri(_webView.CoreWebView2.Source))
+    End Sub
+
+    Private Async Function WaitForWebViewInitializedAsync() As Task
+        Try
+            Await _webView.EnsureCoreWebView2Async(Nothing).ConfigureAwait(False)
+            Await _browserInitializationAwaiter.Task.ConfigureAwait(False)
+        Catch ex As Exception
+
+        End Try
+    End Function
+
+    Private Async Function NavigateAsync(uri As Uri) As Task(Of Uri)
+        'TODO: Implement timeout on NavigateAsync by using CancellationTokenSource
+        _browserNavigationCompletedAwaiter = New TaskCompletionSource(Of Uri)
+
+        _webView.CoreWebView2.Navigate(uri.ToString())
+        Return Await _browserNavigationCompletedAwaiter.Task
+    End Function
+
+    Private Function GetBingMapsUrl() As String
+        'Campus.
+        Return "https://www.bing.com/maps?osid=3297b7d2-6aaa-4303-8d53-36be73c9e7b4&cp=47.634539~-122.179014&lvl=14&imgid=17367977-35be-43e5-b4f8-cb826d6466ea&v=2&sV=2&form=S00027"
+    End Function
+
+    Private Function GetBingMapsUrl(latitude As Decimal, longitude As Decimal) As String
+        Return $"https:\/\/bing.com\/maps\/default.aspx?cp={latitude.ToString.Trim}~-{longitude.ToString.Trim}&lvl=12&style=r"
+    End Function
 End Class
 
 Friend Enum SpeedUnit

@@ -16,6 +16,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.664.37" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\GaugesLib\GaugesLib.vbproj" />
   </ItemGroup>
 
@@ -33,5 +37,4 @@
       <LastGenOutput>Application.Designer.vb</LastGenOutput>
     </None>
   </ItemGroup>
-
 </Project>

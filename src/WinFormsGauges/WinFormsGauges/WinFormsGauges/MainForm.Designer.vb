@@ -34,6 +34,7 @@ Partial Class MainForm
         Me._gpsStatusLabel = New System.Windows.Forms.ToolStripStatusLabel()
         Me._speedUnitToolStripSplitButton = New System.Windows.Forms.ToolStripSplitButton()
         Me._odoMeterValueDelayComponent = New GaugesLib.ValueDelayComponent(Me.components)
+        Me._webView = New Microsoft.Web.WebView2.WinForms.WebView2()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Panel1.SuspendLayout()
         Me.StatusStrip1.SuspendLayout()
@@ -44,9 +45,9 @@ Partial Class MainForm
         Me._gForceControl.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me._gForceControl.Location = New System.Drawing.Point(477, 3)
+        Me._gForceControl.Location = New System.Drawing.Point(412, 3)
         Me._gForceControl.Name = "_gForceControl"
-        Me._gForceControl.Size = New System.Drawing.Size(468, 454)
+        Me._gForceControl.Size = New System.Drawing.Size(404, 374)
         Me._gForceControl.TabIndex = 1
         Me._gForceControl.Text = "GForceVisualizerControl1"
         Me._gForceControl.XGforce = 0!
@@ -66,7 +67,7 @@ Partial Class MainForm
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
         Me.TableLayoutPanel1.RowCount = 1
         Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel1.Size = New System.Drawing.Size(948, 460)
+        Me.TableLayoutPanel1.Size = New System.Drawing.Size(819, 380)
         Me.TableLayoutPanel1.TabIndex = 2
         '
         'Panel1
@@ -77,7 +78,7 @@ Partial Class MainForm
         Me.Panel1.Controls.Add(Me._speedGaugeControl)
         Me.Panel1.Location = New System.Drawing.Point(3, 3)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(468, 454)
+        Me.Panel1.Size = New System.Drawing.Size(403, 374)
         Me.Panel1.TabIndex = 2
         '
         '_speedGaugeControl
@@ -93,7 +94,7 @@ Partial Class MainForm
         Me._speedGaugeControl.MinValue = 0!
         Me._speedGaugeControl.Name = "_speedGaugeControl"
         Me._speedGaugeControl.SeperationStepValue = 20.0!
-        Me._speedGaugeControl.Size = New System.Drawing.Size(457, 443)
+        Me._speedGaugeControl.Size = New System.Drawing.Size(392, 363)
         Me._speedGaugeControl.TabIndex = 1
         Me._speedGaugeControl.Text = "GaugeControl1"
         Me._speedGaugeControl.UnitTextOffset = 40.0!
@@ -107,7 +108,7 @@ Partial Class MainForm
         Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me._gpsStatusLabel, Me._speedUnitToolStripSplitButton})
         Me.StatusStrip1.Location = New System.Drawing.Point(0, 629)
         Me.StatusStrip1.Name = "StatusStrip1"
-        Me.StatusStrip1.Size = New System.Drawing.Size(972, 26)
+        Me.StatusStrip1.Size = New System.Drawing.Size(970, 26)
         Me.StatusStrip1.TabIndex = 3
         Me.StatusStrip1.Text = "StatusStrip1"
         '
@@ -138,11 +139,22 @@ Partial Class MainForm
         Me._odoMeterValueDelayComponent.StepsToTargetCount = 10
         Me._odoMeterValueDelayComponent.TargetValue = New Decimal(New Integer() {0, 0, 0, 0})
         '
+        '_webView
+        '
+        Me._webView.CreationProperties = Nothing
+        Me._webView.Location = New System.Drawing.Point(12, 408)
+        Me._webView.Name = "_webView"
+        Me._webView.Size = New System.Drawing.Size(943, 218)
+        Me._webView.TabIndex = 4
+        Me._webView.Text = "WebView21"
+        Me._webView.ZoomFactor = 1.0R
+        '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 20.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(972, 655)
+        Me.ClientSize = New System.Drawing.Size(970, 655)
+        Me.Controls.Add(Me._webView)
         Me.Controls.Add(Me.StatusStrip1)
         Me.Controls.Add(Me.TableLayoutPanel1)
         Me.Name = "MainForm"
@@ -163,4 +175,5 @@ Partial Class MainForm
     Friend WithEvents _speedGaugeControl As GaugeControl
     Friend WithEvents _speedUnitToolStripSplitButton As ToolStripSplitButton
     Friend WithEvents _odoMeterValueDelayComponent As ValueDelayComponent
+    Friend WithEvents _webView As Microsoft.Web.WebView2.WinForms.WebView2
 End Class
