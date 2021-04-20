@@ -45,9 +45,10 @@ Partial Class MainForm
         Me._gForceControl.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me._gForceControl.Location = New System.Drawing.Point(412, 3)
+        Me._gForceControl.Location = New System.Drawing.Point(397, 4)
+        Me._gForceControl.Margin = New System.Windows.Forms.Padding(4)
         Me._gForceControl.Name = "_gForceControl"
-        Me._gForceControl.Size = New System.Drawing.Size(404, 374)
+        Me._gForceControl.Size = New System.Drawing.Size(385, 245)
         Me._gForceControl.TabIndex = 1
         Me._gForceControl.Text = "GForceVisualizerControl1"
         Me._gForceControl.XGforce = 0!
@@ -58,16 +59,18 @@ Partial Class MainForm
         Me.TableLayoutPanel1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.TableLayoutPanel1.ColumnCount = 2
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
+        Me.TableLayoutPanel1.ColumnCount = 3
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
+        Me.TableLayoutPanel1.ColumnStyles.Add(New System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333!))
         Me.TableLayoutPanel1.Controls.Add(Me._gForceControl, 1, 0)
         Me.TableLayoutPanel1.Controls.Add(Me.Panel1, 0, 0)
-        Me.TableLayoutPanel1.Location = New System.Drawing.Point(12, 12)
+        Me.TableLayoutPanel1.Location = New System.Drawing.Point(15, 15)
+        Me.TableLayoutPanel1.Margin = New System.Windows.Forms.Padding(4)
         Me.TableLayoutPanel1.Name = "TableLayoutPanel1"
         Me.TableLayoutPanel1.RowCount = 1
-        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50.0!))
-        Me.TableLayoutPanel1.Size = New System.Drawing.Size(819, 380)
+        Me.TableLayoutPanel1.RowStyles.Add(New System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100.0!))
+        Me.TableLayoutPanel1.Size = New System.Drawing.Size(1179, 253)
         Me.TableLayoutPanel1.TabIndex = 2
         '
         'Panel1
@@ -76,9 +79,10 @@ Partial Class MainForm
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.Panel1.Controls.Add(Me._speedGaugeControl)
-        Me.Panel1.Location = New System.Drawing.Point(3, 3)
+        Me.Panel1.Location = New System.Drawing.Point(4, 4)
+        Me.Panel1.Margin = New System.Windows.Forms.Padding(4)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(403, 374)
+        Me.Panel1.Size = New System.Drawing.Size(385, 245)
         Me.Panel1.TabIndex = 2
         '
         '_speedGaugeControl
@@ -89,12 +93,13 @@ Partial Class MainForm
         Me._speedGaugeControl.DialLength = 20.0!
         Me._speedGaugeControl.DialOffsetAngle = 90.0!
         Me._speedGaugeControl.Font = New System.Drawing.Font("Segoe UI", 13.5!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point)
-        Me._speedGaugeControl.Location = New System.Drawing.Point(8, 8)
+        Me._speedGaugeControl.Location = New System.Drawing.Point(10, 10)
+        Me._speedGaugeControl.Margin = New System.Windows.Forms.Padding(4)
         Me._speedGaugeControl.MaxValue = 260.0!
         Me._speedGaugeControl.MinValue = 0!
         Me._speedGaugeControl.Name = "_speedGaugeControl"
         Me._speedGaugeControl.SeperationStepValue = 20.0!
-        Me._speedGaugeControl.Size = New System.Drawing.Size(392, 363)
+        Me._speedGaugeControl.Size = New System.Drawing.Size(371, 231)
         Me._speedGaugeControl.TabIndex = 1
         Me._speedGaugeControl.Text = "GaugeControl1"
         Me._speedGaugeControl.UnitTextOffset = 40.0!
@@ -106,9 +111,10 @@ Partial Class MainForm
         '
         Me.StatusStrip1.ImageScalingSize = New System.Drawing.Size(20, 20)
         Me.StatusStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me._gpsStatusLabel, Me._speedUnitToolStripSplitButton})
-        Me.StatusStrip1.Location = New System.Drawing.Point(0, 629)
+        Me.StatusStrip1.Location = New System.Drawing.Point(0, 793)
         Me.StatusStrip1.Name = "StatusStrip1"
-        Me.StatusStrip1.Size = New System.Drawing.Size(970, 26)
+        Me.StatusStrip1.Padding = New System.Windows.Forms.Padding(1, 0, 18, 0)
+        Me.StatusStrip1.Size = New System.Drawing.Size(1212, 26)
         Me.StatusStrip1.TabIndex = 3
         Me.StatusStrip1.Text = "StatusStrip1"
         '
@@ -121,7 +127,7 @@ Partial Class MainForm
         Me._gpsStatusLabel.BorderStyle = System.Windows.Forms.Border3DStyle.SunkenOuter
         Me._gpsStatusLabel.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text
         Me._gpsStatusLabel.Name = "_gpsStatusLabel"
-        Me._gpsStatusLabel.Size = New System.Drawing.Size(200, 20)
+        Me._gpsStatusLabel.Size = New System.Drawing.Size(200, 19)
         Me._gpsStatusLabel.Text = "No GPS Data"
         '
         '_speedUnitToolStripSplitButton
@@ -131,7 +137,7 @@ Partial Class MainForm
         Me._speedUnitToolStripSplitButton.Image = CType(resources.GetObject("_speedUnitToolStripSplitButton.Image"), System.Drawing.Image)
         Me._speedUnitToolStripSplitButton.ImageTransparentColor = System.Drawing.Color.Magenta
         Me._speedUnitToolStripSplitButton.Name = "_speedUnitToolStripSplitButton"
-        Me._speedUnitToolStripSplitButton.Size = New System.Drawing.Size(150, 24)
+        Me._speedUnitToolStripSplitButton.Size = New System.Drawing.Size(150, 23)
         '
         '_odoMeterValueDelayComponent
         '
@@ -141,22 +147,26 @@ Partial Class MainForm
         '
         '_webView
         '
+        Me._webView.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me._webView.CreationProperties = Nothing
-        Me._webView.Location = New System.Drawing.Point(12, 408)
+        Me._webView.Location = New System.Drawing.Point(15, 276)
+        Me._webView.Margin = New System.Windows.Forms.Padding(4)
         Me._webView.Name = "_webView"
-        Me._webView.Size = New System.Drawing.Size(943, 218)
+        Me._webView.Size = New System.Drawing.Size(1179, 497)
         Me._webView.TabIndex = 4
         Me._webView.Text = "WebView21"
         Me._webView.ZoomFactor = 1.0R
         '
         'MainForm
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 20.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(10.0!, 25.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(970, 655)
+        Me.ClientSize = New System.Drawing.Size(1212, 819)
         Me.Controls.Add(Me._webView)
         Me.Controls.Add(Me.StatusStrip1)
         Me.Controls.Add(Me.TableLayoutPanel1)
+        Me.Margin = New System.Windows.Forms.Padding(4)
         Me.Name = "MainForm"
         Me.Text = "WinForms Gauges"
         Me.TableLayoutPanel1.ResumeLayout(False)

@@ -53,7 +53,8 @@ Public Class MainForm
     Private Sub _geoLocator_PositionChanged(sender As Geolocator, args As PositionChangedEventArgs) Handles _geoLocator.PositionChanged
         Dim value As Decimal
 
-        Select Case _speedUnit
+        If args.Position.Coordinate.Speed IsNot Nothing Then
+            Select Case _speedUnit
             Case SpeedUnit.MetersPerSecond
                 value = args.Position.Coordinate.Speed
             Case SpeedUnit.KilometersPerHour
@@ -62,7 +63,8 @@ Public Class MainForm
                 value = args.Position.Coordinate.Speed * 2.23693629
         End Select
 
-        _odoMeterValueDelayComponent.TargetValue = value
+            _odoMeterValueDelayComponent.TargetValue = value
+        End If
     End Sub
 
     Private Sub _geoLocator_StatusChanged(sender As Geolocator, args As StatusChangedEventArgs) Handles _geoLocator.StatusChanged
