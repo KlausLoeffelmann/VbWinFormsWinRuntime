@@ -12,6 +12,7 @@ Public Class MainForm
 
     Private WithEvents _geoLocator As Geolocator
     Private WithEvents _accelerometer As Accelerometer
+
     Private _speedUnit As SpeedUnit
     Private _transparentForm As TransparentForm
     Private _currentLocationUri As Uri
@@ -19,11 +20,12 @@ Public Class MainForm
     Private _isRecording As Boolean
 
     Private _speedUnitTexts As (speedUnit As SpeedUnit, description As String)() =
-        {
-            (SpeedUnit.MetersPerSecond, "Meters per second"),
-            (SpeedUnit.KilometersPerHour, "Kilometers per hour"),
-            (SpeedUnit.MilesPerHours, "Miles per hour")
-        }
+    {
+        (SpeedUnit.MetersPerSecond, "Meters per second"),
+        (SpeedUnit.KilometersPerHour, "Kilometers per hour"),
+        (SpeedUnit.MilesPerHours, "Miles per hour")
+    }
+
     Private _currentLatitude As Double
     Private _currentLongitude As Double
 
@@ -150,6 +152,8 @@ Public Class MainForm
             _currentLongitude)
     End Sub
 
+
+
     Private Sub _geoLocator_StatusChanged(sender As Geolocator, args As StatusChangedEventArgs) Handles _geoLocator.StatusChanged
         _gpsStatusLabel.Text = args.Status.ToString()
     End Sub
@@ -232,6 +236,16 @@ Public Class MainForm
     Private Sub _odoMeterValueDelayComponent_ActualValueChanged(sender As Object, e As EventArgs) Handles _odoMeterValueDelayComponent.ActualValueChanged
         _speedGaugeControl.Value = _odoMeterValueDelayComponent.ActualValue
     End Sub
+
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+        _odoMeterValueDelayComponent.TargetValue = 40
+    End Sub
+
+    Private Sub _accelerometer_ReadingChanged(sender As Accelerometer, args As AccelerometerReadingChangedEventArgs) Handles _accelerometer.ReadingChanged
+        _gForceControl.XGforce = args.Reading.AccelerationX
+        _gForceControl.YGforce = args.Reading.AccelerationY
+    End Sub
+
 End Class
 
 Friend Enum SpeedUnit

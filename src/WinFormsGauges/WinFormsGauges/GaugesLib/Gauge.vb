@@ -52,9 +52,12 @@ Public Class GaugeControl
         g.DrawEllipse(foreColorPen, closeSize)
 
         'Draw the dial.
-        Dim dialSteps As Single = (MaxValue - MinValue) / SeperationStepValue
-        Dim angleStep As Single = (GaugeEndAngle - GaugeStartAngle) / dialSteps
+        Dim valueRange = MaxValue - MinValue
+        Dim dialSteps As Single = valueRange / SeperationStepValue
+        Dim angleRange = GaugeEndAngle - GaugeStartAngle
+        Dim angleStep As Single = angleRange / dialSteps
         Dim currentUnitValue As Single = MinValue
+        Dim valueAngleFactor = angleRange / valueRange
 
         For angle As Single = GaugeStartAngle To GaugeEndAngle Step angleStep
             ' Draw unit separators.
@@ -75,7 +78,7 @@ Public Class GaugeControl
         Next angle
 
         ' Draw value hand.
-        Dim valueAngle = GaugeStartAngle + DialOffsetAngle + Value * angleStep
+        Dim valueAngle = GaugeStartAngle + DialOffsetAngle + Value * valueAngleFactor
         Dim handStart = New PolarCoordinate(center, size.Width - ValueHandStart, size.Height - ValueHandStart, valueAngle)
         Dim handEnd = New PolarCoordinate(center, size.Width - ValueHandEnd, size.Height - ValueHandEnd, valueAngle)
         g.DrawLine(foreColorPen, handStart.Cartesian.X, handStart.Cartesian.Y, handEnd.Cartesian.X, handEnd.Cartesian.Y)
