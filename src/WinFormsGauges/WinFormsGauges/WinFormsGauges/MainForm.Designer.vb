@@ -5,7 +5,7 @@ Partial Class MainForm
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
-    <System.Diagnostics.DebuggerNonUserCode()> _
+    <System.Diagnostics.DebuggerNonUserCode()>
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
         Try
             If disposing AndAlso components IsNot Nothing Then
@@ -22,7 +22,7 @@ Partial Class MainForm
     'NOTE: The following procedure is required by the Windows Form Designer
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
-    <System.Diagnostics.DebuggerStepThrough()> _
+    <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(MainForm))
@@ -39,7 +39,6 @@ Partial Class MainForm
         Me._odoMeterValueDelayComponent = New GaugesLib.ValueDelayComponent(Me.components)
         Me._webView = New Microsoft.Web.WebView2.WinForms.WebView2()
         Me._transparentPanel = New WinFormsGauges.TransparentPanel()
-        Me.Button1 = New System.Windows.Forms.Button()
         Me.TableLayoutPanel1.SuspendLayout()
         Me.Panel1.SuspendLayout()
         Me.Panel2.SuspendLayout()
@@ -115,7 +114,6 @@ Partial Class MainForm
         Me.Panel2.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.Panel2.Controls.Add(Me.Button1)
         Me.Panel2.Controls.Add(Me._startPositionRecordingButton)
         Me.Panel2.Controls.Add(Me._positionRecordingListView)
         Me.Panel2.Location = New System.Drawing.Point(631, 3)
@@ -129,7 +127,7 @@ Partial Class MainForm
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me._startPositionRecordingButton.Location = New System.Drawing.Point(3, 3)
         Me._startPositionRecordingButton.Name = "_startPositionRecordingButton"
-        Me._startPositionRecordingButton.Size = New System.Drawing.Size(138, 40)
+        Me._startPositionRecordingButton.Size = New System.Drawing.Size(301, 40)
         Me._startPositionRecordingButton.TabIndex = 1
         Me._startPositionRecordingButton.Text = "Start position recording"
         Me._startPositionRecordingButton.UseVisualStyleBackColor = True
@@ -139,6 +137,7 @@ Partial Class MainForm
         Me._positionRecordingListView.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
             Or System.Windows.Forms.AnchorStyles.Left) _
             Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me._positionRecordingListView.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point)
         Me._positionRecordingListView.HideSelection = False
         Me._positionRecordingListView.Location = New System.Drawing.Point(3, 49)
         Me._positionRecordingListView.Name = "_positionRecordingListView"
@@ -204,15 +203,6 @@ Partial Class MainForm
         Me._transparentPanel.Size = New System.Drawing.Size(936, 398)
         Me._transparentPanel.TabIndex = 5
         '
-        'Button1
-        '
-        Me.Button1.Location = New System.Drawing.Point(147, 3)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(147, 39)
-        Me.Button1.TabIndex = 2
-        Me.Button1.Text = "Button1"
-        Me.Button1.UseVisualStyleBackColor = True
-        '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 20.0!)
@@ -246,5 +236,4 @@ Partial Class MainForm
     Friend WithEvents _startPositionRecordingButton As Button
     Friend WithEvents _positionRecordingListView As ListView
     Friend WithEvents _transparentPanel As TransparentPanel
-    Friend WithEvents Button1 As Button
 End Class

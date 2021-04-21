@@ -26,8 +26,8 @@ Public Class MainForm
         (SpeedUnit.MilesPerHours, "Miles per hour")
     }
 
-    Private _currentLatitude As Double
-    Private _currentLongitude As Double
+    Private _currentLatitude As Decimal
+    Private _currentLongitude As Decimal
 
     Sub New()
 
@@ -46,8 +46,9 @@ Public Class MainForm
         With _positionRecordingListView
             .HideSelection = False
             .FullRowSelect = True
+            .MultiSelect = False
             .View = View.Details
-            .Columns.Add("Time", 80)
+            .Columns.Add("Time", 90)
             .Columns.Add("Latitude", 120)
             .Columns.Add("Longitude", 120)
         End With
@@ -86,22 +87,16 @@ Public Class MainForm
 
         AddHandler _timer.Tick,
             Async Sub()
-                If _currentLocationUri IsNot Nothing Then
-                    Try
-                        If (_previousLocationUri <> _currentLocationUri) Then
-                            Await NavigateAsync(_currentLocationUri)
-                            _previousLocationUri = _currentLocationUri
-                        End If
-                    Catch ex As Exception
-                    End Try
-
-                    If _isRecording Then
-                        With _positionRecordingListView
-                            Dim listViewItem = .Items.Add($"{Now:HH:mm:ss}")
-                            listViewItem.SubItems.Add($"{_currentLatitude:0.000000}")
-                            listViewItem.SubItems.Add($"{_currentLongitude:0.000000}")
-                        End With
-                    End If
+                If _isRecording Then
+                    With _positionRecordingListView
+                        .BeginUpdate()
+                        Dim listViewItem = .Items.Add($"{Now:HH:mm:ss}")
+                        listViewItem.SubItems.Add($"{_currentLatitude:0.000000}")
+                        listViewItem.SubItems.Add($"{_currentLongitude:0.000000}")
+                        listViewItem.EnsureVisible()
+                        listViewItem.Tag = (_currentLatitude, _currentLongitude)
+                        .EndUpdate()
+                    End With
                 End If
             End Sub
     End Sub
@@ -239,7 +234,7 @@ Public Class MainForm
         _speedGaugeControl.Value = _odoMeterValueDelayComponent.ActualValue
     End Sub
 
-    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+    Private Sub Button1_Click(sender As Object, e As EventArgs)
         _odoMeterValueDelayComponent.TargetValue = 40
     End Sub
 
@@ -248,6 +243,20 @@ Public Class MainForm
         _gForceControl.YGforce = args.Reading.AccelerationZ * 2
     End Sub
 
+    Private Async Sub _positionRecordingListView_ItemSelectionChanged(sender As Object, e As ListViewItemSelectionChangedEventArgs) Handles _positionRecordingListView.ItemSelectionChanged
+
+        If _positionRecordingListView.SelectedItems.Count < 1 Then
+            Return
+        End If
+
+        Dim selectedItem = _positionRecordingListView.SelectedItems(0)
+        Dim position = CType(selectedItem.Tag, (latitude As Decimal, longitude As Decimal))
+        Dim positionUri = GetBingMapsUrl(
+            position.latitude,
+            position.longitude)
+
+        Await NavigateAsync(positionUri)
+    End Sub
 End Class
 
 Friend Enum SpeedUnit
