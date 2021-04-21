@@ -74,6 +74,8 @@ Public Class MainForm
             .ReportInterval = 100
         }
 
+        _accelerometer = Accelerometer.GetDefault
+
         Await WaitForWebViewInitializedAsync()
         Dim microsoftCampusLocationUri = GetBingMapsUrl(_microsoftCampus.longitude, _microsoftCampus.latitude)
         Await NavigateAsync(microsoftCampusLocationUri)
@@ -242,8 +244,8 @@ Public Class MainForm
     End Sub
 
     Private Sub _accelerometer_ReadingChanged(sender As Accelerometer, args As AccelerometerReadingChangedEventArgs) Handles _accelerometer.ReadingChanged
-        _gForceControl.XGforce = args.Reading.AccelerationX
-        _gForceControl.YGforce = args.Reading.AccelerationY
+        _gForceControl.XGforce = args.Reading.AccelerationX * 2
+        _gForceControl.YGforce = args.Reading.AccelerationZ * 2
     End Sub
 
 End Class
