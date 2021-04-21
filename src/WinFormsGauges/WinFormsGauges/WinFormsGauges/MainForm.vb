@@ -5,10 +5,18 @@ Public Class MainForm
 
     Private _browserInitializationAwaiter As TaskCompletionSource = New TaskCompletionSource()
     Private _browserNavigationCompletedAwaiter As TaskCompletionSource(Of Uri)
+    Private _timer As Timer
+
+    'Default point when displaying the map for the first time.
+    Private _microsoftCampus As (longitude As Decimal, latitude As Decimal) = (47.644054, -122.129379)
 
     Private WithEvents _geoLocator As Geolocator
     Private WithEvents _accelerometer As Accelerometer
     Private _speedUnit As SpeedUnit
+    Private _transparentForm As TransparentForm
+    Private _currentLocationUri As Uri
+    Private _previousLocationUri As Uri
+    Private _isRecording As Boolean
 
     Private _speedUnitTexts As (speedUnit As SpeedUnit, description As String)() =
         {
@@ -16,6 +24,8 @@ Public Class MainForm
             (SpeedUnit.KilometersPerHour, "Kilometers per hour"),
             (SpeedUnit.MilesPerHours, "Miles per hour")
         }
+    Private _currentLatitude As Double
+    Private _currentLongitude As Double
 
     Sub New()
 
@@ -31,11 +41,27 @@ Public Class MainForm
                 })
         Next
 
+        With _positionRecordingListView
+            .HideSelection = False
+            .FullRowSelect = True
+            .View = View.Details
+            .Columns.Add("Time", 80)
+            .Columns.Add("Latitude", 120)
+            .Columns.Add("Longitude", 120)
+        End With
+
         'Call back, when the WebView Control is ready.
         AddHandler _webView.CoreWebView2Ready, AddressOf WebView_CoreWebViewReady
 
         SpeedUnit = SpeedUnit.MilesPerHours
         UpdateGaugeScale()
+
+        _timer = New Timer With
+        {
+            .Interval = 1000,
+            .Enabled = True
+        }
+
     End Sub
 
     Private Async Sub MainForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -47,7 +73,54 @@ Public Class MainForm
         }
 
         Await WaitForWebViewInitializedAsync()
-        Await NavigateAsync(New Uri("https://bing.com/maps/default.aspx?cp=43.901683~-69.522416&lvl=12&style=r"))
+        Dim microsoftCampusLocationUri = GetBingMapsUrl(_microsoftCampus.longitude, _microsoftCampus.latitude)
+        Await NavigateAsync(microsoftCampusLocationUri)
+
+        _transparentForm = New TransparentForm
+        _transparentForm.Show()
+        UpdateTransparentForm()
+
+        AddHandler _timer.Tick,
+            Async Sub()
+                If _currentLocationUri IsNot Nothing Then
+                    Try
+                        If (_previousLocationUri <> _currentLocationUri) Then
+                            Await NavigateAsync(_currentLocationUri)
+                            _previousLocationUri = _currentLocationUri
+                        End If
+                    Catch ex As Exception
+                    End Try
+
+                    If _isRecording Then
+                        With _positionRecordingListView
+                            Dim listViewItem = .Items.Add($"{Now:HH:mm:ss}")
+                            listViewItem.SubItems.Add($"{_currentLatitude:0.000000}")
+                            listViewItem.SubItems.Add($"{_currentLongitude:0.000000}")
+                        End With
+                    End If
+                End If
+            End Sub
+    End Sub
+
+    Protected Overrides Sub OnLocationChanged(e As EventArgs)
+        MyBase.OnLocationChanged(e)
+        UpdateTransparentForm()
+    End Sub
+
+    Protected Overrides Sub OnSizeChanged(e As EventArgs)
+        MyBase.OnSizeChanged(e)
+        UpdateTransparentForm()
+    End Sub
+
+    Private Sub UpdateTransparentForm()
+
+        Dim headerOffset = 80
+
+        If _transparentForm Is Nothing Then
+            Return
+        End If
+        _transparentForm.Location = _webView.PointToScreen(New Point(0, headerOffset))
+        _transparentForm.Size = _webView.Size - New Size(0, headerOffset)
     End Sub
 
     Private Sub _geoLocator_PositionChanged(sender As Geolocator, args As PositionChangedEventArgs) Handles _geoLocator.PositionChanged
@@ -55,16 +128,20 @@ Public Class MainForm
 
         If args.Position.Coordinate.Speed IsNot Nothing Then
             Select Case _speedUnit
-            Case SpeedUnit.MetersPerSecond
-                value = args.Position.Coordinate.Speed
-            Case SpeedUnit.KilometersPerHour
-                value = args.Position.Coordinate.Speed * 3.6
-            Case SpeedUnit.MilesPerHours
-                value = args.Position.Coordinate.Speed * 2.23693629
-        End Select
-
-            _odoMeterValueDelayComponent.TargetValue = value
+                Case SpeedUnit.MetersPerSecond
+                    value = args.Position.Coordinate.Speed
+                Case SpeedUnit.KilometersPerHour
+                    value = args.Position.Coordinate.Speed * 3.6
+                Case SpeedUnit.MilesPerHours
+                    value = args.Position.Coordinate.Speed * 2.23693629
+            End Select
         End If
+
+        _currentLatitude = args.Position.Coordinate.Latitude
+        _currentLongitude = args.Position.Coordinate.Longitude
+        _currentLocationUri = GetBingMapsUrl(
+            _currentLatitude,
+            _currentLongitude)
     End Sub
 
     Private Sub _geoLocator_StatusChanged(sender As Geolocator, args As StatusChangedEventArgs) Handles _geoLocator.StatusChanged
@@ -132,14 +209,19 @@ Public Class MainForm
         Return Await _browserNavigationCompletedAwaiter.Task
     End Function
 
-    Private Function GetBingMapsUrl() As String
-        'Campus.
-        Return "https://www.bing.com/maps?osid=3297b7d2-6aaa-4303-8d53-36be73c9e7b4&cp=47.634539~-122.179014&lvl=14&imgid=17367977-35be-43e5-b4f8-cb826d6466ea&v=2&sV=2&form=S00027"
+    Private Function GetBingMapsUrl(latitude As Decimal, longitude As Decimal) As Uri
+        Dim uriString = $"https://bing.com/maps/default.aspx?cp={latitude.ToString.Trim}~{longitude.ToString.Trim}&lvl=12&style=g"
+        Return New Uri(uriString)
     End Function
 
-    Private Function GetBingMapsUrl(latitude As Decimal, longitude As Decimal) As String
-        Return $"https:\/\/bing.com\/maps\/default.aspx?cp={latitude.ToString.Trim}~-{longitude.ToString.Trim}&lvl=12&style=r"
+    Private Function GetBingMapsPointUrl(latitude As Decimal, longitude As Decimal) As Uri
+        Dim uriString = $"https://bing.com/maps/default.aspx?sp=point.{latitude.ToString.Trim}_{longitude.ToString.Trim}_Current"
+        Return New Uri(uriString)
     End Function
+
+    Private Sub _startPositionRecordingButton_Click(sender As Object, e As EventArgs) Handles _startPositionRecordingButton.Click
+        _isRecording = _isRecording Xor True
+    End Sub
 End Class
 
 Friend Enum SpeedUnit
