@@ -7,6 +7,7 @@
     Private _stepDuration As Integer = 25
     Private _stepValue As Decimal
     Private _actualValue As Decimal
+    Private _previousValue As Decimal
 
     <System.Diagnostics.DebuggerNonUserCode()>
     Public Sub New()
@@ -22,8 +23,24 @@
     End Sub
 
     Private Sub Timer_Tick(sender As Object, e As EventArgs) Handles _timer.Tick
-        ActualValue += _stepValue
-        RaiseEvent ActualValueChanged(Me, EventArgs.Empty)
+        If _stepValue > 0 Then
+            ActualValue += _stepValue
+            If ActualValue >= TargetValue Then
+                _stepValue = 0
+                ActualValue = TargetValue
+            End If
+        Else
+            ActualValue += _stepValue
+            If ActualValue <= TargetValue Then
+                _stepValue = 0
+                ActualValue = TargetValue
+            End If
+        End If
+
+        If ActualValue <> _previousValue Then
+            RaiseEvent ActualValueChanged(Me, EventArgs.Empty)
+        End If
+        _previousValue = ActualValue
     End Sub
 
     Public Property TargetValue As Decimal

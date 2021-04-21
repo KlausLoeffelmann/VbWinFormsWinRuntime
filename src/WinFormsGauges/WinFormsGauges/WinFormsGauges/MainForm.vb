@@ -137,6 +137,12 @@ Public Class MainForm
             End Select
         End If
 
+        _odoMeterValueDelayComponent.TargetValue = value
+
+        Invoke(Sub()
+                   Text = "Speed: " & value
+               End Sub)
+
         _currentLatitude = args.Position.Coordinate.Latitude
         _currentLongitude = args.Position.Coordinate.Longitude
         _currentLocationUri = GetBingMapsUrl(
@@ -221,6 +227,10 @@ Public Class MainForm
 
     Private Sub _startPositionRecordingButton_Click(sender As Object, e As EventArgs) Handles _startPositionRecordingButton.Click
         _isRecording = _isRecording Xor True
+    End Sub
+
+    Private Sub _odoMeterValueDelayComponent_ActualValueChanged(sender As Object, e As EventArgs) Handles _odoMeterValueDelayComponent.ActualValueChanged
+        _speedGaugeControl.Value = _odoMeterValueDelayComponent.ActualValue
     End Sub
 End Class
 
